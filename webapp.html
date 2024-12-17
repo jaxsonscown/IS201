@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webapp Game</title>
+    <link rel="stylesheet" href="css/webapp.css"> 
+</head>
+<body>
+     <!-- Quiz Container -->
+     <div class="quiz-container">
+        <h1>Swimming Quiz</h1>
+        <div id="quiz">
+            <div class="question" id="question-text">Loading question...</div>
+            <div class="choices" id="choices"></div>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Created in collaboration with AI | Jaxson Scown</p>
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                question: "How long is an Olympic swimming pool?",
+                choices: ["25 meters", "50 meters", "100 meters", "200 meters"],
+                correct: 1
+            },
+            {
+                question: "What stroke is typically considered the fastest?",
+                choices: ["Freestyle", "Breaststroke", "Butterfly", "Backstroke"],
+                correct: 0
+            },
+            {
+                question: "Who holds the most Olympic gold medals in swimming?",
+                choices: ["Ryan Lochte", "Katie Ledecky", "Michael Phelps", "Mark Spitz"],
+                correct: 2
+            },
+            {
+                question: "How many laps in a 50-meter pool is 400 meters?",
+                choices: ["4", "8", "6", "10"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+
+        // Function to Load a Question
+        function loadQuestion() {
+            const questionElement = document.getElementById("question-text");
+            const choicesElement = document.getElementById("choices");
+            const resultElement = document.getElementById("result");
+
+            // Reset result
+            resultElement.textContent = "";
+
+            const question = questions[currentQuestion];
+            questionElement.textContent = question.question;
+
+            // Clear previous choices
+            choicesElement.innerHTML = "";
+
+            // Add new choices
+            question.choices.forEach((choice, index) => {
+                const button = document.createElement("button");
+                button.textContent = choice;
+                button.onclick = () => checkAnswer(index);
+                choicesElement.appendChild(button);
+            });
+        }
+
+        // Function to Check Answer
+        function checkAnswer(selectedIndex) {
+            const resultElement = document.getElementById("result");
+            const correctIndex = questions[currentQuestion].correct;
+
+            if (selectedIndex === correctIndex) {
+                resultElement.textContent = "Correct! 🎉";
+                resultElement.style.color = "#006400";
+            } else {
+                resultElement.textContent = "Wrong answer. Try again!";
+                resultElement.style.color = "#cc0000";
+            }
+
+            // Move to next question after 1.5 seconds
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    showCompletion();
+                }
+            }, 1500);
+        }
+
+        // Function to Show Completion
+        function showCompletion() {
+            const quizElement = document.getElementById("quiz");
+            quizElement.innerHTML = `
+                <h2>Quiz Complete!</h2>
+                <p>Great job testing your swimming knowledge! 🏊‍♂️</p>
+            `;
+        }
+
+        // Initialize the Quiz
+        loadQuestion();
+    </script>
+</body>
+</html>
